@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Sensitive files
+*.json.tmp
+
+#passwords
+constants/parameters.py
+constants/secrets.py
+.env
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Output
+output/
+*.csv
+*.xlsx
+
+# Temporary files
+*.tmp
+*.bak
+
+
+# Quant framework generated data
+quant_data/
+
+# email alert credentials
+alerts_config.json

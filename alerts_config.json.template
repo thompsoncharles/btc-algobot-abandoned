@@ -1,0 +1,11 @@
+{
+  "_note": "Copy to alerts_config.json (gitignored) and fill in. Set enabled=true to activate email alerts for btc-daily-routine. For Gmail use an App Password (myaccount.google.com/apppasswords), smtp.gmail.com port 587.",
+  "enabled": false,
+  "smtp_host": "smtp.gmail.com",
+  "smtp_port": 587,
+  "use_ssl": false,
+  "smtp_user": "you@example.com",
+  "smtp_password": "app-password-here",
+  "from_addr": "you@example.com",
+  "to_addr": "you@example.com"
+}

@@ -1,0 +1,10 @@
+This folder is the RESEARCH LAB copy (V4.2algobot-master-lab).
+
+- Experimental only. NOT the paper-observation system of record.
+- The frozen paper-observation project lives in V4.1algobot-master (no -lab).
+- The Windows scheduled task "BTC Paper Daily Routine" must keep pointing at
+  the ORIGINAL folder. scripts/setup_btc_daily_task.ps1 in this folder refuses
+  to run while this LAB_MODE file exists.
+- This lab's quant_data/ and journal are research scratch - they are NOT
+  observation evidence and must never be merged back into the original journal.
+- Live trading is disabled here exactly as in the original.

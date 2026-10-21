@@ -1,0 +1,165 @@
+"""
+Global constants, parameters, and hyperparameters for algobot_v2.
+
+All configuration values, thresholds, and parameters should be defined here.
+
+NOTE: This is a template file. Copy this to parameters.py and fill in your actual values.
+The real parameters.py file is gitignored to protect sensitive information.
+"""
+
+# Godel Terminal Configuration
+GODEL_URL = "https://app.godelterminal.com/"
+GODEL_USERNAME = "your_email@example.com"  # Replace with your Godel Terminal email
+GODEL_PASSWORD = "your_password"  # Replace with your Godel Terminal password
+
+# Interactive Brokers Configuration
+IBKR_HOST = "127.0.0.1"
+IBKR_PORT = 7497  # 7497 = TWS paper, 7496 = TWS live, 4002 = Gateway paper, 4001 = Gateway live
+IBKR_CLIENT_ID = 7
+PAPER_TRADING = True  # Must match IBKR_PORT (checked at startup - ibkr.connection aborts on mismatch)
+
+# Database Configuration (Local SQLite for now)
+DATABASE_TYPE = "sqlite"  # Options: "sqlite", "mysql" (for future use)
+DATABASE_NAME = "algobot_trades.db"
+DATABASE_PATH = None  # Will be set to project root / database_name
+
+# Trading Parameters
+STOP_LOSS_PERCENT = 2.0  # Default stop loss percentage
+TAKE_PROFIT_PERCENT = 4.0  # Default take profit percentage
+MAX_HOLD_TIME_MINUTES = 60  # Maximum time to hold a position
+MAX_POSITION_SIZE_DOLLARS = 1000.0  # Maximum position size in dollars per trade
+MAX_POSITIONS = 5  # Maximum number of concurrent open positions
+
+# PRT Strategy Parameters (prob_up thresholds)
+PROB_UP_MIN_LONG = 0.55  # Minimum prob_up for long positions
+PROB_UP_MIN_SHORT = 0.45  # Maximum prob_up for short positions (prob_up < this)
+PROB_UP_EDGE_THRESHOLD = 0.00001  # Minimum edge for consideration
+DO_OPPOSITE = False  # If True, invert PRT direction (trade against the signal)
+PRT_RECHECK_INTERVAL_SECONDS = 60  # Wait between rolling strategy cycles
+
+# MOST Command Parameters
+MOST_TAB = "ACTIVE"  # Tab to use: ACTIVE, GAINERS, LOSERS, VALUE
+MOST_LIMIT = 100  # Number of results (10, 25, 50, 75, 100)
+PRT_MAX_TICKERS = 75  # Maximum tickers that can be sent to PRT
+
+# Market Hours Parameters
+MARKET_OPEN_DELAY_MINUTES = 1  # Wait after market open before trading
+MARKET_CLOSE_BUFFER_MINUTES = 5  # Stop trading this many minutes before close
+
+# Monitoring Parameters
+ACCOUNT_SIZE_CHECK_INTERVAL_MINUTES = 15  # How often to log account size during trading
+
+# Order Parameters
+USE_LIMIT_ORDERS = True  # Use limit orders instead of market orders
+LIMIT_ORDER_TIMEOUT_SECONDS = 10  # Timeout for limit orders
+LIMIT_ORDER_MAX_ATTEMPTS = 3  # Max attempts before using market order
+LIMIT_ORDER_PRICE_OFFSET_PERCENT = 0.02  # Initial offset from quote (2 basis points)
+LIMIT_ORDER_ADJUSTMENT_PERCENT = 0.05  # Price adjustment per attempt (5 basis points)
+
+# Godel Terminal Timeouts
+TERMINAL_LOAD_TIMEOUT = 15  # Seconds to wait for terminal to load
+COMMAND_EXECUTION_TIMEOUT = 30  # Seconds to wait for command execution
+WINDOW_DETECTION_TIMEOUT = 10  # Seconds to wait for new window creation
+
+# Browser Configuration
+BROWSER_HEADLESS = False  # Set to True for headless mode
+BROWSER_WINDOW_SIZE = (1920, 1080)
+
+# Logging Configuration
+LOG_LEVEL = "INFO"  # Options: DEBUG, INFO, WARNING, ERROR
+LOG_FILE = "algobot.log"
+
+# ============================================================
+# QUANT research framework (quant/ package)
+# ============================================================
+
+# --- Data layer ---
+QUANT_DATA_DIR = "quant_data"       # parquet + duckdb storage, relative to project root
+FRED_API_KEY = ""                   # free key: https://fred.stlouisfed.org/docs/api/api_key.html
+QUANT_HISTORY_YEARS = 2             # daily bar history depth for ingestion
+
+# --- Universe selection ---
+UNIVERSE_MIN_PRICE = 3.0
+UNIVERSE_MIN_ADDV_USD = 5_000_000   # minimum average daily dollar volume
+UNIVERSE_MIN_MARKET_CAP = 300_000_000
+UNIVERSE_MAX_SPREAD_BPS = 20.0
+UNIVERSE_ALLOWED_EXCHANGES = ("NYQ", "NMS", "ASE", "PCX", "NGM", "NCM", "NYSE", "NASDAQ", "AMEX")
+
+# --- Modeling ---
+QUANT_TARGET_HORIZON_BARS = 5       # forward-return horizon, in bars of the working interval
+QUANT_LABEL_UP_THRESHOLD = 0.0      # classification label = 1 when fwd return > this
+QUANT_MODEL_DIR = "quant_data/models"
+
+# --- Probability engine ---
+QUANT_GODEL_BLEND_WEIGHT = 0.5      # weight given to Godel PRT prob_up when blending with model
+
+# --- Position sizing ---
+QUANT_KELLY_FRACTION = 0.25         # fractional Kelly multiplier
+QUANT_VOL_TARGET_ANNUAL = 0.15      # annualized volatility target per position
+QUANT_MAX_POSITION_PCT = 10.0       # max single position, percent of equity
+QUANT_MAX_SECTOR_PCT = 30.0         # max sector exposure, percent of equity
+QUANT_MAX_GROSS_EXPOSURE_PCT = 100.0
+
+# --- Risk management ---
+QUANT_DAILY_LOSS_LIMIT_PCT = 3.0
+QUANT_MAX_DRAWDOWN_PCT = 10.0
+QUANT_MAX_PAIRWISE_CORR = 0.85
+QUANT_CIRCUIT_VIX_LEVEL = 40.0
+QUANT_CIRCUIT_INDEX_DROP_PCT = 3.0
+
+# --- Backtesting costs ---
+QUANT_COMMISSION_PER_SHARE = 0.005
+QUANT_COMMISSION_MIN = 1.0
+QUANT_SLIPPAGE_BPS = 2.0
+
+# --- Retraining ---
+QUANT_RETRAIN_SCHEDULE = "weekly"   # "daily" | "weekly"
+QUANT_DRIFT_SHARPE_FLOOR = 0.0      # rolling live Sharpe below this flags performance drift
+QUANT_ROLLBACK_ON_UNDERPERFORM = True
+
+# --- Execution slicing ---
+QUANT_TWAP_SLICES = 4
+QUANT_TWAP_INTERVAL_SECONDS = 30
+
+# --- BTCUSD linear-AR path (Godel PRT is temporarily offline; this is a
+#     standalone signal source, no Godel dependency - see quant/models/linear_ar.py) ---
+BTC_INTERVAL = "12h"            # Binance kline interval used for ingest/train/backtest
+BTC_AR_LAGS = 5                 # number of lagged log-return features
+BTC_FORECAST_HORIZON_BARS = 1   # bars ahead the AR model predicts
+BTC_SLIPPAGE_BPS = 5.0          # crypto spreads run wider than equities
+BTC_STOP_PCT = 3.0
+BTC_TARGET_PCT = 6.0
+BTC_MAX_HOLD_BARS = 8           # 8 * 12h = 4 days
+
+# --- Account + IBKR spot-crypto fees (Paxos custody; retail $5k account) ---
+ACCOUNT_EQUITY_USD = 5000.0     # actual account size - sizing and backtests use this
+BTC_FEE_TIER1_PCT = 0.18        # % of trade value, monthly crypto volume <= $100k
+BTC_FEE_MIN_USD = 1.75          # minimum commission per order
+BTC_FEE_CAP_PCT = 1.0           # minimum is capped at 1% of trade value
+# (0.15% / 0.12% tiers exist at $100k+ / $1M+ monthly volume - unreachable at $5k)
+
+# --- $5k-aware position sizing ---
+BTC_RISK_PER_TRADE_PCT = 1.0    # risk 1% of equity per trade ($50 on $5k)
+BTC_MIN_TRADE_NOTIONAL_USD = 500.0   # below this the $1.75 min fee dominates (>0.35% side)
+BTC_MAX_POSITION_PCT = 50.0     # hard cap: one position never exceeds 50% of equity
+BTC_MIN_EDGE_TO_COST = 2.0      # expected edge must be >= 2x round-trip fees to trade
+
+# --- Signal: features, entry threshold, no-trade regime filter ---
+BTC_USE_FEATURES = True         # True: rich feature set; False: lagged returns only (AR baseline)
+BTC_PROB_ENTRY = 0.58           # raise the bar - trade fewer, stronger setups (was 0.55)
+BTC_MIN_CONFIDENCE = 0.05       # skip when |prob_up - 0.5| < this (near coin-flip = no trade)
+BTC_MIN_VOL_PCTILE = 0.10       # skip when realized-vol percentile below this (dead/choppy tape)
+BTC_MA_WINDOW = 20              # MA-trend baseline window + trend-regime feature window
+
+
+
+# --- Secret overrides: environment variables win (keeps real creds out of this
+#     OneDrive-synced file - set GODEL_USERNAME / GODEL_PASSWORD in your
+#     shell/OS environment and they override whatever is written above) ---
+import os as _os
+GODEL_USERNAME = _os.getenv("GODEL_USERNAME", GODEL_USERNAME)
+GODEL_PASSWORD = _os.getenv("GODEL_PASSWORD", GODEL_PASSWORD)
+try:
+    from constants.secrets import *  # optional local, gitignored secrets module
+except ImportError:
+    pass

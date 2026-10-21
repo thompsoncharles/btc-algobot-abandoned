@@ -1,0 +1,8 @@
+selenium>=4.0.0
+webdriver-manager>=3.8.0
+pandas>=2.0.0
+pytz>=2023.3
+loguru>=0.7.0
+yfinance>=0.2.0
+ib_async>=1.0.0
+
