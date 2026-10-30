@@ -2,6 +2,7 @@
 
 > ## ⚠️ THIS IS THE EXPERIMENTAL LAB (`V4.2algobot-master-lab`)
 >
+> Godel_Profile folder ommited for doxx
 > **Do not use this folder for live or paper observation.** The frozen
 > paper-observation system of record is `V4.1algobot-master` (no `-lab`) —
 > its scheduled task, journal, and paper reports must never point here.
